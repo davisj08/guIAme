@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot - GUIA.ME</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0047AB;
+            --primary-dark: #003580;
+            --secondary: #4A90E2;
+            --accent: #D4AF37;
+            --success: #6B8E23;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F5F5F5;
+            --border: #E0E0E0;
+            --user-message: #0047AB;
+            --bot-message: #F5F5F5;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Demo Container */
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .demo-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .demo-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .demo-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+        }
+
+        .demo-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 32px;
+        }
+
+        .demo-section {
+            margin-bottom: 40px;
+        }
+
+        .demo-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .demo-section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .demo-section-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        /* Chat FAB (Floating Action Button) */
+        .chat-fab {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            border-radius: 50%;
+            box-shadow: 0 4px 20px rgba(0, 71, 171, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+            border: none;
+            animation: pulse 2s infinite;
+        }
+
+        .chat-fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 28px rgba(0, 71, 171, 0.5);
+        }
+
+        .chat-fab.active {
+            transform: rotate(45deg);
+            background: var(--text-secondary);
+        }
+
+        .chat-fab-icon {
+            font-size: 28px;
+            transition: transform 0.3s ease;
+        }
+
+        .chat-fab.active .chat-fab-icon {
+            transform: rotate(-45deg);
+        }
+
+        .chat-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            min-width: 24px;
+            height: 24px;
+            background: #E53935;
+            border-radius: 12px;
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            padding: 0 6px;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 4px 20px rgba(0, 71, 171, 0.4);
+            }
+            50% {
+                box-shadow: 0 4px 20px rgba(0, 71, 171, 0.4), 0 0 0 12px rgba(0, 71, 171, 0.1);
+            }
+        }
+
+        /* Chat Window */
+        .chat-window {
+            position: fixed;
+            bottom: 110px;
+            right: 32px;
+            width: 400px;
+            height: 600px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+            display: none;
+            flex-direction: column;
+            z-index: 999;
+            overflow: hidden;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .chat-window.active {
+            display: flex;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Chat Header */
+        .chat-header {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chat-avatar {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .chat-header-info {
+            flex: 1;
+        }
+
+        .chat-header-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .chat-header-status {
+            font-size: 12px;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #4CAF50;
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .chat-close {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .chat-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Chat Messages */
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background: var(--bg-secondary);
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .message.bot .message-avatar {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+        }
+
+        .message.user .message-avatar {
+            background: var(--accent);
+        }
+
+        .message-content {
+            max-width: 70%;
+        }
+
+        .message-bubble {
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .message.bot .message-bubble {
+            background: white;
+            color: var(--text-primary);
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.user .message-bubble {
+            background: var(--user-message);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            padding: 0 4px;
+        }
+
+        .message.user .message-time {
+            text-align: right;
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 12px;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 16px;
+            border-bottom-left-radius: 4px;
+            width: fit-content;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--text-secondary);
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.7;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+
+        /* Quick Replies */
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .quick-reply {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-reply:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Suggestion Cards */
+        .suggestion-card {
+            background: white;
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .suggestion-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .suggestion-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .suggestion-description {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Chat Input */
+        .chat-input-container {
+            padding: 16px;
+            background: white;
+            border-top: 1px solid var(--border);
+        }
+
+        .chat-input-wrapper {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 24px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: none;
+            max-height: 100px;
+            transition: border-color 0.2s;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .chat-send-btn {
+            width: 44px;
+            height: 44px;
+            background: var(--primary);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .chat-send-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .chat-send-btn:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+
+        /* Welcome Message */
+        .welcome-message {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .welcome-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        .welcome-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .welcome-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .welcome-suggestions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .welcome-suggestion {
+            background: var(--bg-secondary);
+            border: 2px solid transparent;
+            padding: 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .welcome-suggestion:hover {
+            border-color: var(--primary);
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        .welcome-suggestion-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .welcome-suggestion-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .welcome-suggestion-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .chat-window {
+                width: calc(100vw - 32px);
+                height: calc(100vh - 140px);
+                right: 16px;
+                bottom: 94px;
+            }
+
+            .chat-fab {
+                right: 16px;
+                bottom: 16px;
+            }
+        }
+
+        /* Demo Specific Styles */
+        .demo-fab-container {
+            position: relative;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .demo-chat-fab {
+            position: relative;
+            bottom: auto;
+            right: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Demo Header -->
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1 class="demo-title">Interface do Chatbot - GUIA.ME</h1>
+            <p class="demo-subtitle">Assistente Virtual Inteligente para Exploração de Brasília</p>
+        </div>
+
+        <!-- FAB Demo -->
+        <div class="demo-content">
+            <div class="demo-section">
+                <h2 class="demo-section-title">1. Botão Flutuante (FAB)</h2>
+                <p class="demo-section-description">
+                    O botão flutuante fica sempre visível no canto inferior direito da tela, com animação de pulso para chamar atenção.
+                </p>
+                <div class="demo-fab-container">
+                    <button class="chat-fab demo-chat-fab" onclick="alert('Clique no botão fixo no canto inferior direito para abrir o chat!')">
+                        <span class="chat-fab-icon">💬</span>
+                        <span class="chat-badge">IA</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Window Demo -->
+        <div class="demo-content">
+            <div class="demo-section">
+                <h2 class="demo-section-title">2. Janela de Chat</h2>
+                <p class="demo-section-description">
+                    Interface completa do chat com header personalizado, área de mensagens e campo de entrada.
+                </p>
+                <div style="position: relative; height: 620px; background: var(--bg-secondary); border-radius: 12px; padding: 10px;">
+                    <div class="chat-window" style="position: absolute; display: flex; bottom: 10px; right: 10px;">
+                        <!-- Chat Header -->
+                        <div class="chat-header">
+                            <div class="chat-avatar">🤖</div>
+                            <div class="chat-header-info">
+                                <div class="chat-header-title">Guia IA Brasília</div>
+                                <div class="chat-header-status">
+                                    <span class="status-dot"></span>
+                                    Online agora
+                                </div>
+                            </div>
+                            <button class="chat-close">✕</button>
+                        </div>
+
+                        <!-- Chat Messages -->
+                        <div class="chat-messages" id="demo-messages">
+                            <!-- Bot Welcome -->
+                            <div class="message bot">
+                                <div class="message-avatar">🤖</div>
+                                <div class="message-content">
+                                    <div class="message-bubble">
+                                        Olá! 👋 Sou o Guia IA do GUIA.ME. Estou aqui para te ajudar a explorar Brasília! Como posso te ajudar hoje?
+                                    </div>
+                                    <div class="message-time">Agora</div>
+                                    <div class="quick-replies">
+                                        <div class="quick-reply">🏛️ Monumentos</div>
+                                        <div class="quick-reply">🍽️ Restaurantes</div>
+                                        <div class="quick-reply">🎭 Eventos</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- User Message -->
+                            <div class="message user">
+                                <div class="message-avatar">👤</div>
+                                <div class="message-content">
+                                    <div class="message-bubble">
+                                        Quais são os principais pontos turísticos de Brasília?
+                                    </div>
+                                    <div class="message-time">Agora</div>
+                                </div>
+                            </div>
+
+                            <!-- Bot Response with Suggestions -->
+                            <div class="message bot">
+                                <div class="message-avatar">🤖</div>
+                                <div class="message-content">
+                                    <div class="message-bubble">
+                                        Brasília tem monumentos incríveis! Aqui estão os principais:
+                                    </div>
+                                    <div class="suggestion-card">
+                                        <div class="suggestion-title">🏛️ Catedral Metropolitana</div>
+                                        <div class="suggestion-description">Obra-prima de Niemeyer • 2.5 km • ⭐ 4.8</div>
+                                    </div>
+                                    <div class="suggestion-card">
+                                        <div class="suggestion-title">🏛️ Congresso Nacional</div>
+                                        <div class="suggestion-description">Símbolo da democracia • 3.2 km • ⭐ 4.9</div>
+                                    </div>
+                                    <div class="message-time">Agora</div>
+                                </div>
+                            </div>
+
+                            <!-- Typing Indicator -->
+                            <div class="message bot">
+                                <div class="message-avatar">🤖</div>
+                                <div class="message-content">
+                                    <div class="typing-indicator">
+                                        <div class="typing-dot"></div>
+                                        <div class="typing-dot"></div>
+                                        <div class="typing-dot"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chat Input -->
+                        <div class="chat-input-container">
+                            <div class="chat-input-wrapper">
+                                <textarea class="chat-input" placeholder="Digite sua mensagem..." rows="1"></textarea>
+                                <button class="chat-send-btn">➤</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Welcome State Demo -->
+        <div class="demo-content">
+            <div class="demo-section">
+                <h2 class="demo-section-title">3. Estado Inicial (Welcome)</h2>
+                <p class="demo-section-description">
+                    Quando o usuário abre o chat pela primeira vez, uma tela de boas-vindas com sugestões é exibida.
+                </p>
+                <div style="position: relative; height: 620px; background: var(--bg-secondary); border-radius: 12px; padding: 10px;">
+                    <div class="chat-window" style="position: absolute; display: flex; bottom: 10px; right: 10px;">
+                        <!-- Chat Header -->
+                        <div class="chat-header">
+                            <div class="chat-avatar">🤖</div>
+                            <div class="chat-header-info">
+                                <div class="chat-header-title">Guia IA Brasília</div>
+                                <div class="chat-header-status">
+                                    <span class="status-dot"></span>
+                                    Online agora
+                                </div>
+                            </div>
+                            <button class="chat-close">✕</button>
+                        </div>
+
+                        <!-- Welcome Message -->
+                        <div class="chat-messages">
+                            <div class="welcome-message">
+                                <div class="welcome-icon">🤖</div>
+                                <h3 class="welcome-title">Olá! Sou o Guia IA</h3>
+                                <p class="welcome-text">
+                                    Estou aqui para te ajudar a explorar Brasília. Escolha uma opção ou faça uma pergunta:
+                                </p>
+                                <div class="welcome-suggestions">
+                                    <div class="welcome-suggestion">
+                                        <div class="welcome-suggestion-icon">🏛️</div>
+                                        <div class="welcome-suggestion-title">Explorar Monumentos</div>
+                                        <div class="welcome-suggestion-text">Descubra a arquitetura de Niemeyer</div>
+                                    </div>
+                                    <div class="welcome-suggestion">
+                                        <div class="welcome-suggestion-icon">🗺️</div>
+                                        <div class="welcome-suggestion-title">Criar Roteiro</div>
+                                        <div class="welcome-suggestion-text">Roteiro personalizado para você</div>
+                                    </div>
+                                    <div class="welcome-suggestion">
+                                        <div class="welcome-suggestion-icon">🍽️</div>
+                                        <div class="welcome-suggestion-title">Onde Comer</div>
+                                        <div class="welcome-suggestion-text">Melhores restaurantes da cidade</div>
+                                    </div>
+                                    <div class="welcome-suggestion">
+                                        <div class="welcome-suggestion-icon">🎭</div>
+                                        <div class="welcome-suggestion-title">Eventos Hoje</div>
+                                        <div class="welcome-suggestion-text">O que está acontecendo agora</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chat Input -->
+                        <div class="chat-input-container">
+                            <div class="chat-input-wrapper">
+                                <textarea class="chat-input" placeholder="Digite sua mensagem..." rows="1"></textarea>
+                                <button class="chat-send-btn">➤</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actual Functional Chat FAB -->
+    <button class="chat-fab" id="chatFab">
+        <span class="chat-fab-icon">💬</span>
+        <span class="chat-badge">IA</span>
+    </button>
+
+    <!-- Actual Functional Chat Window -->
+    <div class="chat-window" id="chatWindow">
+        <!-- Chat Header -->
+        <div class="chat-header">
+            <div class="chat-avatar">🤖</div>
+            <div class="chat-header-info">
+                <div class="chat-header-title">Guia IA Brasília</div>
+                <div class="chat-header-status">
+                    <span class="status-dot"></span>
+                    Online agora
+                </div>
+            </div>
+            <button class="chat-close" id="chatClose">✕</button>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages" id="chatMessages">
+            <div class="welcome-message">
+                <div class="welcome-icon">🤖</div>
+                <h3 class="welcome-title">Olá! Sou o Guia IA</h3>
+                <p class="welcome-text">
+                    Estou aqui para te ajudar a explorar Brasília. Escolha uma opção ou faça uma pergunta:
+                </p>
+                <div class="welcome-suggestions">
+                    <div class="welcome-suggestion" onclick="sendQuickMessage('Quero explorar monumentos')">
+                        <div class="welcome-suggestion-icon">🏛️</div>
+                        <div class="welcome-suggestion-title">Explorar Monumentos</div>
+                        <div class="welcome-suggestion-text">Descubra a arquitetura de Niemeyer</div>
+                    </div>
+                    <div class="welcome-suggestion" onclick="sendQuickMessage('Quero criar um roteiro personalizado')">
+                        <div class="welcome-suggestion-icon">🗺️</div>
+                        <div class="welcome-suggestion-title">Criar Roteiro</div>
+                        <div class="welcome-suggestion-text">Roteiro personalizado para você</div>
+                    </div>
+                    <div class="welcome-suggestion" onclick="sendQuickMessage('Onde posso comer bem em Brasília?')">
+                        <div class="welcome-suggestion-icon">🍽️</div>
+                        <div class="welcome-suggestion-title">Onde Comer</div>
+                        <div class="welcome-suggestion-text">Melhores restaurantes da cidade</div>
+                    </div>
+                    <div class="welcome-suggestion" onclick="sendQuickMessage('Quais eventos estão acontecendo hoje?')">
+                        <div class="welcome-suggestion-icon">🎭</div>
+                        <div class="welcome-suggestion-title">Eventos Hoje</div>
+                        <div class="welcome-suggestion-text">O que está acontecendo agora</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="chat-input-container">
+            <div class="chat-input-wrapper">
+                <textarea class="chat-input" id="chatInput" placeholder="Digite sua mensagem..." rows="1"></textarea>
+                <button class="chat-send-btn" id="chatSend">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Chat functionality
+        const chatFab = document.getElementById('chatFab');
+        const chatWindow = document.getElementById('chatWindow');
+        const chatClose = document.getElementById('chatClose');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const chatSend = document.getElementById('chatSend');
+
+        let isWelcomeShown = true;
+
+        // Toggle chat window
+        chatFab.addEventListener('click', () => {
+            chatWindow.classList.toggle('active');
+            chatFab.classList.toggle('active');
+        });
+
+        chatClose.addEventListener('click', () => {
+            chatWindow.classList.remove('active');
+            chatFab.classList.remove('active');
+        });
+
+        // Send message
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            // Clear welcome if first message
+            if (isWelcomeShown) {
+                chatMessages.innerHTML = '';
+                isWelcomeShown = false;
+            }
+
+            // Add user message
+            addMessage(message, 'user');
+            chatInput.value = '';
+            chatInput.style.height = 'auto';
+
+            // Simulate bot typing
+            setTimeout(() => {
+                addTypingIndicator();
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    addBotResponse(message);
+                }, 1500);
+            }, 500);
+        }
+
+        function sendQuickMessage(message) {
+            if (isWelcomeShown) {
+                chatMessages.innerHTML = '';
+                isWelcomeShown = false;
+            }
+            addMessage(message, 'user');
+            setTimeout(() => {
+                addTypingIndicator();
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    addBotResponse(message);
+                }, 1500);
+            }, 500);
+        }
+
+        function addMessage(text, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = type === 'user' ? '👤' : '🤖';
+            
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            
+            const bubble = document.createElement('div');
+            bubble.className = 'message-bubble';
+            bubble.textContent = text;
+            
+            const time = document.createElement('div');
+            time.className = 'message-time';
+            time.textContent = 'Agora';
+            
+            content.appendChild(bubble);
+            content.appendChild(time);
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addTypingIndicator() {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+            messageDiv.id = 'typing-indicator';
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = '🤖';
+            
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            
+            const typing = document.createElement('div');
+            typing.className = 'typing-indicator';
+            typing.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+            
+            content.appendChild(typing);
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const typing = document.getElementById('typing-indicator');
+            if (typing) typing.remove();
+        }
+
+        function addBotResponse(userMessage) {
+            const responses = {
+                'monumentos': 'Brasília tem monumentos incríveis! Recomendo visitar a Catedral Metropolitana, o Congresso Nacional e o Memorial JK. Quer que eu crie um roteiro para você?',
+                'roteiro': 'Vou criar um roteiro personalizado para você! Quanto tempo você tem disponível? 4 horas, 1 dia ou mais?',
+                'comer': 'Brasília tem ótimas opções gastronômicas! Recomendo o Pontão do Lago Sul para uma experiência à beira do lago, ou a 408 Sul para restaurantes variados. Qual tipo de culinária prefere?',
+                'eventos': 'Hoje temos vários eventos em Brasília! A Feira da Torre está acontecendo com artesanato local, e há shows no Complexo Cultural. Quer mais detalhes sobre algum?'
+            };
+
+            let response = 'Entendi! Posso te ajudar com isso. O GUIA.ME tem informações completas sobre Brasília. Quer que eu te mostre mais detalhes?';
+
+            const lowerMessage = userMessage.toLowerCase();
+            if (lowerMessage.includes('monumento')) response = responses.monumentos;
+            else if (lowerMessage.includes('roteiro')) response = responses.roteiro;
+            else if (lowerMessage.includes('comer') || lowerMessage.includes('restaurante')) response = responses.comer;
+            else if (lowerMessage.includes('evento')) response = responses.eventos;
+
+            addMessage(response, 'bot');
+        }
+
+        // Send on button click
+        chatSend.addEventListener('click', sendMessage);
+
+        // Send on Enter (Shift+Enter for new line)
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Auto-resize textarea
+        chatInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+        });
+    </script>
+</body>
+</html>
+

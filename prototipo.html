@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUIA.ME - Cadastro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0047AB;
+            --primary-dark: #003580;
+            --primary-darker: #002860;
+            --secondary: #4A90E2;
+            --accent: #D4AF37;
+            --success: #6B8E23;
+            --error: #E53935;
+            --warning: #FF9800;
+            --info: #00CED1;
+            
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F5F5F5;
+            --border: #E0E0E0;
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 4px 20px rgba(0, 0, 0, 0.12);
+            --shadow-primary: 0 2px 8px rgba(0, 71, 171, 0.2);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .app-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .screen {
+            display: none;
+            min-height: 100vh;
+            padding: 24px;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Splash Screen */
+        .splash-screen {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            color: white;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            padding: 48px 24px;
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 48px;
+            letter-spacing: -1px;
+        }
+
+        .logo-subtitle {
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0.9;
+            margin-top: -40px;
+            margin-bottom: 48px;
+        }
+
+        .splash-illustration {
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+            margin: 0 auto 48px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .splash-illustration img {
+            width: 80%;
+            height: auto;
+            opacity: 0.9;
+        }
+
+        .splash-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .splash-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 48px;
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            height: 48px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--shadow-primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 71, 171, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 71, 171, 0.05);
+        }
+
+        .btn-social {
+            background: white;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            padding-left: 48px;
+        }
+
+        .btn-social:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+
+        .btn-social::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            width: 24px;
+            height: 24px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .btn-google::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%234285F4' d='M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z'/%3E%3Cpath fill='%2334A853' d='M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z'/%3E%3Cpath fill='%23FBBC05' d='M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z'/%3E%3Cpath fill='%23EA4335' d='M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z'/%3E%3C/svg%3E");
+        }
+
+        .btn-facebook::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231877F2'%3E%3Cpath d='M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z'/%3E%3C/svg%3E");
+        }
+
+        .btn-apple::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000000'%3E%3Cpath d='M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z'/%3E%3C/svg%3E");
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 48px;
+            padding: 0 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.2s ease-in-out;
+            background: white;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 71, 171, 0.1);
+        }
+
+        .form-input.error {
+            border-color: var(--error);
+        }
+
+        .form-input.error:focus {
+            box-shadow: 0 0 0 4px rgba(229, 57, 53, 0.1);
+        }
+
+        .form-input.success {
+            border-color: var(--success);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 12px;
+            margin-top: 6px;
+            display: none;
+        }
+
+        .form-input.error + .error-message {
+            display: block;
+        }
+
+        .password-strength {
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease-in-out;
+            border-radius: 2px;
+        }
+
+        .password-strength-bar.weak {
+            width: 33%;
+            background: var(--error);
+        }
+
+        .password-strength-bar.medium {
+            width: 66%;
+            background: var(--warning);
+        }
+
+        .password-strength-bar.strong {
+            width: 100%;
+            background: var(--success);
+        }
+
+        /* Checkbox */
+        .checkbox-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.2s ease-in-out;
+            position: relative;
+        }
+
+        .checkbox.checked {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .checkbox.checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .checkbox-label {
+            font-size: 13px;
+            color: var(--text-primary);
+            cursor: pointer;
+            flex: 1;
+        }
+
+        /* Legal Text */
+        .legal-text {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-align: center;
+            line-height: 1.5;
+            margin: 20px 0;
+        }
+
+        .legal-text a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 24px 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* Link */
+        .link {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            display: block;
+            margin-top: 16px;
+            transition: opacity 0.2s;
+        }
+
+        .link:hover {
+            opacity: 0.8;
+        }
+
+        /* Header */
+        .screen-header {
+            margin-bottom: 32px;
+        }
+
+        .screen-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .screen-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        /* Progress Indicator */
+        .progress-dots {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 32px;
+        }
+
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .progress-dot.active {
+            background: var(--primary);
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        /* Cards */
+        .card {
+            border: 2px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            text-align: center;
+        }
+
+        .card:hover {
+            border-color: var(--secondary);
+            transform: scale(1.02);
+        }
+
+        .card.selected {
+            border-color: var(--primary);
+            background: rgba(0, 71, 171, 0.05);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 12px;
+            background: var(--bg-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        /* Code Input */
+        .code-input-wrapper {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 32px 0;
+        }
+
+        .code-input {
+            width: 48px;
+            height: 56px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+            font-family: inherit;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .code-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 71, 171, 0.1);
+        }
+
+        /* Toggle */
+        .toggle-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--bg-secondary);
+        }
+
+        .toggle-label {
+            font-size: 14px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toggle-switch {
+            width: 48px;
+            height: 28px;
+            background: var(--border);
+            border-radius: 14px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .toggle-switch.on {
+            background: var(--primary);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-switch.on::after {
+            left: 22px;
+        }
+
+        /* Button Row */
+        .button-row {
+            display: flex;
+            gap: 12px;
+            margin-top: auto;
+            padding-top: 24px;
+        }
+
+        .button-row .btn {
+            flex: 1;
+        }
+
+        /* Success Icon */
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--success);
+            border-radius: 50%;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+            animation: scaleIn 0.5s ease-in-out;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .success-content {
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Spacer */
+        .spacer {
+            flex: 1;
+        }
+
+        .spacer-sm {
+            height: 16px;
+        }
+
+        .spacer-md {
+            height: 24px;
+        }
+
+        .spacer-lg {
+            height: 32px;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .app-container {
+                box-shadow: none;
+            }
+        }
+
+        /* Timer */
+        .timer {
+            color: var(--text-secondary);
+            font-size: 14px;
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .icon-wrapper {
+            width: 64px;
+            height: 64px;
+            background: var(--bg-secondary);
+            border-radius: 50%;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Screen 1: Splash -->
+        <div class="screen active splash-screen" id="screen-splash">
+            <div>
+                <div class="logo">GUIA.ME</div>
+                <div class="logo-subtitle">Seu guia inteligente</div>
+                <div class="splash-illustration">
+                    <img src="brasilia_illustration.png" alt="Brasília" onerror="this.style.display='none'">
+                </div>
+                <h1 class="splash-title">Explore Brasília de forma inteligente</h1>
+                <p class="splash-subtitle">Seu guia turístico personalizado com inteligência artificial</p>
+            </div>
+            <div>
+                <button class="btn btn-primary" onclick="goToScreen('screen-signup-method')">Começar</button>
+                <a href="#" class="link" onclick="goToScreen('screen-login'); return false;">Já tenho conta</a>
+            </div>
+        </div>
+
+        <!-- Screen 2: Signup Method -->
+        <div class="screen" id="screen-signup-method">
+            <div class="screen-header">
+                <h2 class="screen-title">Crie sua conta</h2>
+                <p class="screen-subtitle">Comece sua jornada por Brasília</p>
+            </div>
+            
+            <div>
+                <button class="btn btn-social btn-google">Continuar com Google</button>
+                <div class="spacer-sm"></div>
+                <button class="btn btn-social btn-facebook">Continuar com Facebook</button>
+                <div class="spacer-sm"></div>
+                <button class="btn btn-social btn-apple">Continuar com Apple</button>
+                
+                <div class="divider">ou</div>
+                
+                <button class="btn btn-secondary" onclick="goToScreen('screen-signup-form')">Cadastrar com e-mail</button>
+            </div>
+            
+            <div class="spacer"></div>
+            <a href="#" class="link" onclick="goToScreen('screen-login'); return false;">Já tem conta? Entrar</a>
+        </div>
+
+        <!-- Screen 3: Signup Form -->
+        <div class="screen" id="screen-signup-form">
+            <div class="screen-header">
+                <h2 class="screen-title">Criar conta</h2>
+            </div>
+            
+            <form id="signup-form" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label class="form-label" for="name">Como você se chama?</label>
+                    <input type="text" id="name" class="form-input" placeholder="Digite seu nome completo" required>
+                    <div class="error-message">Por favor, digite seu nome completo</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="email">Qual seu e-mail?</label>
+                    <input type="email" id="email" class="form-input" placeholder="seuemail@exemplo.com" required>
+                    <div class="error-message">Por favor, digite um e-mail válido</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="password">Crie uma senha segura</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" class="form-input" placeholder="Mínimo 8 caracteres" required>
+                        <span class="input-icon" onclick="togglePassword()">👁️</span>
+                    </div>
+                    <div class="password-strength">
+                        <div class="password-strength-bar" id="password-strength-bar"></div>
+                    </div>
+                    <div class="error-message">A senha deve ter no mínimo 8 caracteres</div>
+                </div>
+                
+                <div class="checkbox-wrapper">
+                    <div class="checkbox checked" id="newsletter-checkbox" onclick="toggleCheckbox('newsletter-checkbox')"></div>
+                    <label class="checkbox-label" for="newsletter-checkbox">Quero receber dicas e novidades sobre Brasília</label>
+                </div>
+                
+                <div class="legal-text">
+                    Ao continuar, você concorda com nossos <a href="#">Termos de Uso</a> e <a href="#">Política de Privacidade</a>
+                </div>
+                
+                <div class="spacer"></div>
+                
+                <button type="submit" class="btn btn-primary">Criar minha conta</button>
+                <a href="#" class="link" onclick="goToScreen('screen-signup-method'); return false;">Voltar</a>
+            </form>
+        </div>
+
+        <!-- Screen 4: Email Verification -->
+        <div class="screen" id="screen-verification">
+            <div class="screen-header">
+                <div class="icon-wrapper">📧</div>
+                <h2 class="screen-title">Verifique seu e-mail</h2>
+                <p class="screen-subtitle">Enviamos um código de verificação para <strong id="user-email"></strong></p>
+            </div>
+            
+            <div class="code-input-wrapper">
+                <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 1)">
+                <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 2)">
+                <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 3)">
+                <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 4)">
+                <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 5)">
+                <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 6)">
+            </div>
+            
+            <div class="timer" id="resend-timer">Reenviar código em <span id="timer-seconds">60</span>s</div>
+            
+            <div class="spacer"></div>
+            
+            <button class="btn btn-primary" onclick="goToScreen('screen-onboarding-1')">Verificar</button>
+            <a href="#" class="link">Não recebeu? Alterar e-mail</a>
+        </div>
+
+        <!-- Screen 5: Onboarding 1 - Interests -->
+        <div class="screen" id="screen-onboarding-1">
+            <div class="progress-dots">
+                <div class="progress-dot active"></div>
+                <div class="progress-dot"></div>
+                <div class="progress-dot"></div>
+            </div>
+            
+            <div class="screen-header">
+                <h2 class="screen-title">O que você mais gosta de fazer?</h2>
+                <p class="screen-subtitle">Selecione seus interesses para recomendações personalizadas</p>
+            </div>
+            
+            <div style="flex: 1; overflow-y: auto;">
+                <div class="card selected" onclick="toggleCard(this)">
+                    <div class="card-icon">🏛️</div>
+                    <div class="card-title">Monumentos e Arquitetura</div>
+                </div>
+                <div class="card" onclick="toggleCard(this)">
+                    <div class="card-icon">🎨</div>
+                    <div class="card-title">Arte e Cultura</div>
+                </div>
+                <div class="card selected" onclick="toggleCard(this)">
+                    <div class="card-icon">🌳</div>
+                    <div class="card-title">Natureza e Parques</div>
+                </div>
+                <div class="card" onclick="toggleCard(this)">
+                    <div class="card-icon">🍽️</div>
+                    <div class="card-title">Gastronomia</div>
+                </div>
+                <div class="card" onclick="toggleCard(this)">
+                    <div class="card-icon">🛍️</div>
+                    <div class="card-title">Compras</div>
+                </div>
+                <div class="card" onclick="toggleCard(this)">
+                    <div class="card-icon">🎭</div>
+                    <div class="card-title">Eventos e Shows</div>
+                </div>
+            </div>
+            
+            <div class="button-row">
+                <button class="btn btn-secondary" onclick="goToScreen('screen-onboarding-3')">Pular</button>
+                <button class="btn btn-primary" onclick="goToScreen('screen-onboarding-2')">Continuar</button>
+            </div>
+        </div>
+
+        <!-- Screen 6: Onboarding 2 - Profile -->
+        <div class="screen" id="screen-onboarding-2">
+            <div class="progress-dots">
+                <div class="progress-dot active"></div>
+                <div class="progress-dot active"></div>
+                <div class="progress-dot"></div>
+            </div>
+            
+            <div class="screen-header">
+                <h2 class="screen-title">Você é...</h2>
+            </div>
+            
+            <div style="flex: 1; overflow-y: auto;">
+                <div class="card" onclick="selectSingleCard(this)">
+                    <div class="card-icon">🏠</div>
+                    <div class="card-title">Morador de Brasília</div>
+                </div>
+                <div class="card selected" onclick="selectSingleCard(this)">
+                    <div class="card-icon">✈️</div>
+                    <div class="card-title">Turista visitando pela primeira vez</div>
+                </div>
+                <div class="card" onclick="selectSingleCard(this)">
+                    <div class="card-icon">🔄</div>
+                    <div class="card-title">Já visitei Brasília antes</div>
+                </div>
+                <div class="card" onclick="selectSingleCard(this)">
+                    <div class="card-icon">💼</div>
+                    <div class="card-title">Estou a trabalho</div>
+                </div>
+            </div>
+            
+            <div class="button-row">
+                <button class="btn btn-secondary" onclick="goToScreen('screen-onboarding-1')">Voltar</button>
+                <button class="btn btn-primary" onclick="goToScreen('screen-onboarding-3')">Continuar</button>
+            </div>
+        </div>
+
+        <!-- Screen 7: Onboarding 3 - Notifications -->
+        <div class="screen" id="screen-onboarding-3">
+            <div class="progress-dots">
+                <div class="progress-dot active"></div>
+                <div class="progress-dot active"></div>
+                <div class="progress-dot active"></div>
+            </div>
+            
+            <div class="screen-header">
+                <h2 class="screen-title">Quer receber sugestões personalizadas?</h2>
+                <p class="screen-subtitle">Enviaremos notificações com dicas e eventos próximos a você</p>
+            </div>
+            
+            <div style="flex: 1;">
+                <div class="toggle-item">
+                    <div class="toggle-label">📍 Sugestões baseadas em localização</div>
+                    <div class="toggle-switch on" onclick="toggleSwitch(this)"></div>
+                </div>
+                <div class="toggle-item">
+                    <div class="toggle-label">🎉 Eventos e novidades</div>
+                    <div class="toggle-switch on" onclick="toggleSwitch(this)"></div>
+                </div>
+                <div class="toggle-item">
+                    <div class="toggle-label">⭐ Ofertas especiais</div>
+                    <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                </div>
+            </div>
+            
+            <div class="button-row">
+                <button class="btn btn-secondary" onclick="goToScreen('screen-onboarding-2')">Voltar</button>
+                <button class="btn btn-primary" onclick="goToScreen('screen-welcome')">Começar a explorar</button>
+            </div>
+        </div>
+
+        <!-- Screen 8: Welcome -->
+        <div class="screen" id="screen-welcome">
+            <div class="success-content">
+                <div class="success-icon">✓</div>
+                <h2 class="screen-title">Tudo pronto, <span id="welcome-name">Viajante</span>!</h2>
+                <p class="screen-subtitle">Brasília te espera. Vamos começar?</p>
+                <div class="spacer-lg"></div>
+                <div class="splash-illustration" style="background: var(--bg-secondary);">
+                    <img src="brasilia_illustration.png" alt="Brasília" onerror="this.style.display='none'">
+                </div>
+            </div>
+            
+            <button class="btn btn-primary">Explorar Brasília</button>
+        </div>
+
+        <!-- Screen 9: Login -->
+        <div class="screen" id="screen-login">
+            <div class="screen-header">
+                <h2 class="screen-title">Bem-vindo de volta!</h2>
+            </div>
+            
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label" for="login-email">E-mail</label>
+                    <input type="email" id="login-email" class="form-input" placeholder="seuemail@exemplo.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="login-password">Senha</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="login-password" class="form-input" placeholder="Digite sua senha" required>
+                        <span class="input-icon" onclick="toggleLoginPassword()">👁️</span>
+                    </div>
+                </div>
+                
+                <div class="checkbox-wrapper">
+                    <div class="checkbox" id="remember-checkbox" onclick="toggleCheckbox('remember-checkbox')"></div>
+                    <label class="checkbox-label" for="remember-checkbox">Lembrar de mim</label>
+                </div>
+                
+                <a href="#" class="link" onclick="goToScreen('screen-forgot-password'); return false;">Esqueceu a senha?</a>
+                
+                <div class="spacer-md"></div>
+                
+                <button type="submit" class="btn btn-primary">Entrar</button>
+                
+                <div class="divider">ou</div>
+                
+                <button type="button" class="btn btn-social btn-google">Continuar com Google</button>
+                <div class="spacer-sm"></div>
+                <button type="button" class="btn btn-social btn-facebook">Continuar com Facebook</button>
+                
+                <a href="#" class="link" onclick="goToScreen('screen-signup-method'); return false;">Não tem conta? Cadastre-se</a>
+            </form>
+        </div>
+
+        <!-- Screen 10: Forgot Password -->
+        <div class="screen" id="screen-forgot-password">
+            <div class="screen-header">
+                <div class="icon-wrapper">🔑</div>
+                <h2 class="screen-title">Recuperar senha</h2>
+                <p class="screen-subtitle">Digite o e-mail cadastrado</p>
+            </div>
+            
+            <form onsubmit="handleForgotPassword(event)">
+                <div class="form-group">
+                    <label class="form-label" for="forgot-email">E-mail</label>
+                    <input type="email" id="forgot-email" class="form-input" placeholder="seuemail@exemplo.com" required>
+                </div>
+                
+                <div class="spacer"></div>
+                
+                <button type="submit" class="btn btn-primary">Enviar link de recuperação</button>
+                <a href="#" class="link" onclick="goToScreen('screen-login'); return false;">Voltar para login</a>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Navigation
+        function goToScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // Toggle Functions
+        function toggleCheckbox(id) {
+            const checkbox = document.getElementById(id);
+            checkbox.classList.toggle('checked');
+        }
+
+        function toggleCard(card) {
+            card.classList.toggle('selected');
+        }
+
+        function selectSingleCard(card) {
+            const parent = card.parentElement;
+            parent.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+        }
+
+        function toggleSwitch(toggle) {
+            toggle.classList.toggle('on');
+        }
+
+        function togglePassword() {
+            const input = document.getElementById('password');
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function toggleLoginPassword() {
+            const input = document.getElementById('login-password');
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        // Password Strength
+        document.getElementById('password')?.addEventListener('input', function(e) {
+            const password = e.target.value;
+            const bar = document.getElementById('password-strength-bar');
+            
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            
+            bar.className = 'password-strength-bar';
+            if (strength === 1) bar.classList.add('weak');
+            else if (strength === 2) bar.classList.add('medium');
+            else if (strength === 3) bar.classList.add('strong');
+        });
+
+        // Code Input Navigation
+        function moveToNext(input, index) {
+            if (input.value.length === 1 && index < 6) {
+                const nextInput = input.parentElement.children[index];
+                if (nextInput) nextInput.focus();
+            }
+            
+            // Auto-submit when all filled
+            const inputs = document.querySelectorAll('.code-input');
+            const allFilled = Array.from(inputs).every(inp => inp.value.length === 1);
+            if (allFilled) {
+                setTimeout(() => {
+                    goToScreen('screen-onboarding-1');
+                }, 500);
+            }
+        }
+
+        // Timer
+        let timerSeconds = 60;
+        function startTimer() {
+            const timerElement = document.getElementById('timer-seconds');
+            const interval = setInterval(() => {
+                timerSeconds--;
+                if (timerElement) timerElement.textContent = timerSeconds;
+                if (timerSeconds <= 0) {
+                    clearInterval(interval);
+                    document.getElementById('resend-timer').innerHTML = '<a href="#" class="link">Reenviar código</a>';
+                }
+            }, 1000);
+        }
+
+        // Form Handlers
+        function handleSignup(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            
+            // Store user data
+            localStorage.setItem('userName', name.split(' ')[0]);
+            localStorage.setItem('userEmail', email);
+            
+            // Update verification screen
+            document.getElementById('user-email').textContent = email;
+            
+            // Go to verification
+            goToScreen('screen-verification');
+            startTimer();
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            // Simulate login
+            goToScreen('screen-welcome');
+        }
+
+        function handleForgotPassword(e) {
+            e.preventDefault();
+            alert('Link de recuperação enviado para seu e-mail!');
+            goToScreen('screen-login');
+        }
+
+        // Load user name on welcome screen
+        window.addEventListener('load', () => {
+            const userName = localStorage.getItem('userName');
+            if (userName) {
+                const welcomeNameElement = document.getElementById('welcome-name');
+                if (welcomeNameElement) {
+                    welcomeNameElement.textContent = userName;
+                }
+            }
+        });
+
+        // Focus first input on code screen
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.target.id === 'screen-verification' && 
+                        mutation.target.classList.contains('active')) {
+                        const firstInput = mutation.target.querySelector('.code-input');
+                        if (firstInput) firstInput.focus();
+                    }
+                });
+            });
+
+            document.querySelectorAll('.screen').forEach(screen => {
+                observer.observe(screen, { attributes: true, attributeFilter: ['class'] });
+            });
+        });
+    </script>
+</body>
+</html>
+

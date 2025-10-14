@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wireframes - GUIA.ME Cadastro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f0f0f0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #333;
+        }
+
+        .wireframes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .wireframe-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .wireframe-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #0047AB;
+            text-align: center;
+        }
+
+        .phone-frame {
+            width: 100%;
+            max-width: 375px;
+            margin: 0 auto;
+            aspect-ratio: 375 / 812;
+            border: 3px solid #333;
+            border-radius: 30px;
+            padding: 15px;
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 25px;
+            background: #333;
+            border-radius: 0 0 15px 15px;
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: white;
+            padding: 40px 20px 20px;
+            overflow-y: auto;
+        }
+
+        /* Wireframe Elements */
+        .wf-logo {
+            width: 120px;
+            height: 40px;
+            background: #ddd;
+            margin: 0 auto 20px;
+            border-radius: 4px;
+        }
+
+        .wf-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #e0e0e0 25%, #f0f0f0 25%, #f0f0f0 50%, #e0e0e0 50%, #e0e0e0 75%, #f0f0f0 75%);
+            background-size: 20px 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .wf-text {
+            height: 20px;
+            background: #ddd;
+            margin-bottom: 10px;
+            border-radius: 2px;
+        }
+
+        .wf-text.large {
+            height: 28px;
+            background: #bbb;
+            margin-bottom: 8px;
+        }
+
+        .wf-text.small {
+            height: 14px;
+            width: 70%;
+            margin: 0 auto 15px;
+        }
+
+        .wf-button {
+            height: 48px;
+            background: #0047AB;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .wf-button.secondary {
+            background: white;
+            border: 2px solid #0047AB;
+            color: #0047AB;
+        }
+
+        .wf-button.social {
+            background: white;
+            border: 1px solid #ddd;
+            color: #333;
+            position: relative;
+        }
+
+        .wf-button.social::before {
+            content: '';
+            width: 24px;
+            height: 24px;
+            background: #ddd;
+            border-radius: 50%;
+            position: absolute;
+            left: 12px;
+        }
+
+        .wf-input {
+            height: 48px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .wf-input-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .wf-divider {
+            text-align: center;
+            margin: 20px 0;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .wf-link {
+            text-align: center;
+            color: #0047AB;
+            font-size: 14px;
+            margin-top: 16px;
+        }
+
+        .wf-card {
+            border: 2px solid #ddd;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .wf-card.selected {
+            border-color: #0047AB;
+            background: rgba(0, 71, 171, 0.05);
+        }
+
+        .wf-icon {
+            width: 48px;
+            height: 48px;
+            background: #ddd;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+        }
+
+        .wf-progress {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .wf-progress-dot {
+            width: 8px;
+            height: 8px;
+            background: #ddd;
+            border-radius: 50%;
+        }
+
+        .wf-progress-dot.active {
+            background: #0047AB;
+        }
+
+        .wf-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .wf-checkbox-box {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .wf-checkbox-box.checked {
+            background: #0047AB;
+            border-color: #0047AB;
+        }
+
+        .wf-legal {
+            font-size: 11px;
+            color: #999;
+            text-align: center;
+            margin: 16px 0;
+            line-height: 1.4;
+        }
+
+        .wf-code-input {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .wf-code-box {
+            width: 48px;
+            height: 56px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .wf-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .wf-toggle-switch {
+            width: 48px;
+            height: 28px;
+            background: #ddd;
+            border-radius: 14px;
+            position: relative;
+        }
+
+        .wf-toggle-switch.on {
+            background: #0047AB;
+        }
+
+        .wf-toggle-switch::after {
+            content: '';
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: left 0.2s;
+        }
+
+        .wf-toggle-switch.on::after {
+            left: 22px;
+        }
+
+        .buttons-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .buttons-row .wf-button {
+            flex: 1;
+        }
+
+        .spacer {
+            height: 20px;
+        }
+
+        .wf-success-icon {
+            width: 80px;
+            height: 80px;
+            background: #6B8E23;
+            border-radius: 50%;
+            margin: 40px auto 20px;
+        }
+
+        @media (max-width: 768px) {
+            .wireframes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Wireframes - Fluxo de Cadastro GUIA.ME</h1>
+        
+        <div class="wireframes-grid">
+            <!-- Tela 1: Splash Screen -->
+            <div class="wireframe-card">
+                <h2 class="wireframe-title">1. Splash Screen / Boas-vindas</h2>
+                <div class="phone-frame">
+                    <div class="phone-notch"></div>
+                    <div class="screen">
+                        <div class="spacer"></div>
+                        <div class="wf-logo"></div>
+                        <div class="wf-image"></div>
+                        <div class="wf-text large"></div>
+                        <div class="wf-text small"></div>
+                        <div class="spacer"></div>
+                        <div class="wf-button">Começar</div>
+                        <div class="wf-link">Já tenho conta</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tela 2: Escolha do Método -->
+            <div class="wireframe-card">
+                <h2 class="wireframe-title">2. Escolha do Método de Cadastro</h2>
+                <div class="phone-frame">
+                    <div class="phone-notch"></div>
+                    <div class="screen">
+                        <div class="wf-text large"></div>
+                        <div class="wf-text small"></div>
+                        <div class="spacer"></div>
+                        <div class="wf-button social">Continuar com Google</div>
+                        <div class="wf-button social">Continuar com Facebook</div>
+                        <div class="wf-button social">Continuar com Apple</div>
+                        <div class="wf-divider">ou</div>
+                        <div class="wf-button secondary">Cadastrar com e-mail</div>
+                        <div class="spacer"></div>
+                        <div class="wf-link">Já tem conta? Entrar</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tela 3: Formulário de Cadastro -->
+            <div class="wireframe-card">
+                <h2 class="wireframe-title">3. Formulário de Cadastro</h2>
+                <div class="phone-frame">
+                    <div class="phone-notch"></div>
+                    <div class="screen">
+                        <div class="wf-text large"></div>
+                        <div class="spacer"></div>
+                        <div class="wf-input-label">Como você se chama?</div>
+                        <div class="wf-input"></div>
+                        <div class="wf-input-label">Qual seu e-mail?</div>
+                        <div class="wf-input"></div>
+                        <div class="wf-input-label">Crie uma senha segura</div>
+                        <div class="wf-input"></div>
+                        <div class="wf-checkbox">
+                            <div class="wf-checkbox-box checked"></div>
+                            <div style="font-size: 13px;">Quero receber dicas sobre Brasília</div>
+                        </div>
+                        <div class="wf-legal">Ao continuar, você concorda com nossos Termos de Uso e Política de Privacidade</div>
+                        <div class="wf-button">Criar minha conta</div>
+                        <div class="wf-link">Voltar</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tela 4: Verificação de Email -->
+            <div class="wireframe-card">
+                <h2 class="wireframe-title">4. Verificação de E-mail</h2>
+                <div class="phone-frame">
+                    <div class="phone-notch"></div>
+                    <div class="screen">
+                        <div class="spacer"></div>
+                        <div class="wf-icon"></div>
+                        <div class="wf-text large"></div>
+                        <div class="wf-text small"></div>
+                        <div class="spacer"></div>
+                        <div class="wf-code-input">
+                            <div class="wf-code-box"></div>
+                            <div class="wf-code-box"></div>
+                            <div class="wf-code-box"></div>
+                            <div class="wf-code-box"></div>
+                            <div class="wf-code-box"></div>
+                            <div class="wf-code-box"></div>
+                        </div>
+                        <div class="wf-link">Reenviar código em 0:59</div>
+                        <div class="spacer"></div>
+                        <div class="wf-button">Verificar</div>
+                        <div class="wf-link">Não recebeu? Alterar e-mail</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tela 5: Onboarding 1 -->
+            <div class="wireframe-card">
+                <h2 class="wireframe-title">5. Onboarding - Interesses</h2>
+                <div class="phone-frame">
+                    <div class="phone-notch"></div>
+                    <div class="screen">
+                        <div class="wf-progress">
+                            <div class="wf-progress-dot active"></div>
+                            <div class="wf-progress-dot"></div>
+                            <div class="wf-progress-dot"></div>
+                        </div>
+                        <div class="wf-text large"></div>
+                        <div class="wf-text small"></div>
+                        <div class="spacer"></div>
+                        <div class="wf-card selected">
+                            <div class="wf-icon"></div>
+                            <div style="font-size: 14px;">Monumentos e Arquitetura</div>
+                        </div>
+                        <div class="wf-card">
+                            <div class="wf-icon"></div>
+                            <div style="font-size: 14px;">Arte e Cultura</div>
+                        </div>
+                        <div class="wf-card selected">
+                            <div class="wf-icon"></div>
+                            <div style="font-size: 14px;">Natureza e Parques</div>
+                        </div>
+                        <div class="buttons-row">
+                            <div class="wf-button secondary">Pular</div>
+                            <div class="wf-button">Continuar</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tela 6: Onboarding 2 -->
+            <div class="wireframe-card">
+                <h2 class="wireframe-title">6. Onboarding - Perfil</h2>
+                <div class="phone-frame">
+                    <div class="phone-notch"></div>
+                    <div class="screen">
+                        <div class="wf-progress">
+                            <div class="wf-progress-dot active"></div>
+                            <div class="wf-progress-dot active"></div>
+                            <div class="wf-progress-dot"></div>
+                        </div>
+                        <div class="wf-text large"></div>
+                        <div class="spacer"></div>
+                        <div class="wf-card">
+                            <div class="wf-icon"></div>
+                            <div style="font-size: 14px;">Morador de Brasília</div>
+                        </div>
+                        <div class="wf-card selected">
+                            <div class="wf-icon"></div>
+                            <div style="font-size: 14px;">Turista visitando pela primeira vez</div>
+                        </div>
+                        <div class="wf-card">
+                            <div class="wf-icon"></div>
+                            <div style="font-size: 14px;">Já visitei Brasília antes</div>
+                        </div>
+                        <div class="wf-card">
+                            <div class="wf-icon"></div>
+                            <div style="font-size: 14px;">Estou a trabalho</div>
+                        </div>
+                        <div class="buttons-row">
+                            <div class="wf-button secondary">Voltar</div>
+                            <div class="wf-button">Continuar</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tela 7: Onboarding 3 -->
+            <div class="wireframe-card">
+                <h2 class="wireframe-title">7. Onboarding - Notificações</h2>
+                <div class="phone-frame">
+                    <div class="phone-notch"></div>
+                    <div class="screen">
+                        <div class="wf-progress">
+                            <div class="wf-progress-dot active"></div>
+                            <div class="wf-progress-dot active"></div>
+                            <div class="wf-progress-dot active"></div>
+                        </div>
+                        <div class="wf-text large"></div>
+                        <div class="wf-text small"></div>
+                        <div class="spacer"></div>
+                        <div class="wf-toggle">
+                            <div style="font-size: 14px;">📍 Sugestões baseadas em localização</div>
+                            <div class="wf-toggle-switch on"></div>
+                        </div>
+                        <div class="wf-toggle">
+                            <div style="font-size: 14px;">🎉 Eventos e novidades</div>
+                            <div class="wf-toggle-switch on"></div>
+                        </div>
+                        <div class="wf-toggle">
+                            <div style="font-size: 14px;">⭐ Ofertas especiais</div>
+                            <div class="wf-toggle-switch"></div>
+                        </div>
+                        <div class="spacer"></div>
+                        <div class="buttons-row">
+                            <div class="wf-button secondary">Voltar</div>
+                            <div class="wf-button">Começar a explorar</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tela 8: Boas-vindas Final -->
+            <div class="wireframe-card">
+                <h2 class="wireframe-title">8. Boas-vindas Final</h2>
+                <div class="phone-frame">
+                    <div class="phone-notch"></div>
+                    <div class="screen">
+                        <div class="spacer"></div>
+                        <div class="wf-success-icon"></div>
+                        <div class="wf-text large"></div>
+                        <div class="wf-text small"></div>
+                        <div class="spacer"></div>
+                        <div class="wf-image"></div>
+                        <div class="spacer"></div>
+                        <div class="wf-button">Explorar Brasília</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tela 9: Login -->
+            <div class="wireframe-card">
+                <h2 class="wireframe-title">9. Login</h2>
+                <div class="phone-frame">
+                    <div class="phone-notch"></div>
+                    <div class="screen">
+                        <div class="wf-text large"></div>
+                        <div class="spacer"></div>
+                        <div class="wf-input-label">E-mail</div>
+                        <div class="wf-input"></div>
+                        <div class="wf-input-label">Senha</div>
+                        <div class="wf-input"></div>
+                        <div class="wf-checkbox">
+                            <div class="wf-checkbox-box"></div>
+                            <div style="font-size: 13px;">Lembrar de mim</div>
+                        </div>
+                        <div class="wf-link">Esqueceu a senha?</div>
+                        <div class="spacer"></div>
+                        <div class="wf-button">Entrar</div>
+                        <div class="wf-divider">ou</div>
+                        <div class="wf-button social">Continuar com Google</div>
+                        <div class="wf-button social">Continuar com Facebook</div>
+                        <div class="wf-link">Não tem conta? Cadastre-se</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tela 10: Recuperação de Senha -->
+            <div class="wireframe-card">
+                <h2 class="wireframe-title">10. Recuperação de Senha</h2>
+                <div class="phone-frame">
+                    <div class="phone-notch"></div>
+                    <div class="screen">
+                        <div class="spacer"></div>
+                        <div class="wf-icon"></div>
+                        <div class="wf-text large"></div>
+                        <div class="wf-text small"></div>
+                        <div class="spacer"></div>
+                        <div class="wf-input-label">E-mail</div>
+                        <div class="wf-input"></div>
+                        <div class="spacer"></div>
+                        <div class="wf-button">Enviar link de recuperação</div>
+                        <div class="wf-link">Voltar para login</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Usuário - GUIA.ME</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0047AB;
+            --primary-dark: #003580;
+            --secondary: #4A90E2;
+            --accent: #D4AF37;
+            --success: #6B8E23;
+            --bronze: #CD7F32;
+            --silver: #C0C0C0;
+            --gold: #FFD700;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F5F5F5;
+            --border: #E0E0E0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--bg-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 20px;
+        }
+
+        .back-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--bg-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 18px;
+        }
+
+        .icon-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Profile Header */
+        .profile-header {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 32px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 71, 171, 0.3);
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .profile-header-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .profile-avatar-container {
+            position: relative;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            object-fit: cover;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        .profile-level-badge {
+            position: absolute;
+            bottom: -4px;
+            right: -4px;
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 3px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-title {
+            font-size: 18px;
+            opacity: 0.95;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 32px;
+            margin-top: 24px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        /* Level Progress */
+        .level-progress-section {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .level-progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .level-progress-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .level-progress-info {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .progress-bar-container {
+            position: relative;
+            height: 32px;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary) 0%, var(--primary) 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 16px;
+            transition: width 1s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-bar-text {
+            font-size: 13px;
+            font-weight: 700;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .next-level-info {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Grid Layout */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        /* Achievements Section */
+        .achievements-section {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .view-all-btn {
+            font-size: 14px;
+            color: var(--primary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .view-all-btn:hover {
+            color: var(--primary-dark);
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 20px;
+        }
+
+        .achievement-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 16px;
+            background: var(--bg-secondary);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            background: white;
+        }
+
+        .achievement-card.locked {
+            opacity: 0.5;
+        }
+
+        .achievement-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+        }
+
+        .achievement-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .achievement-description {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .achievement-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 24px;
+            height: 24px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        /* Ranking Section */
+        .ranking-section {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 32px;
+        }
+
+        .ranking-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .ranking-item:hover {
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .ranking-item.current-user {
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.1) 0%, rgba(0, 71, 171, 0.1) 100%);
+            border: 2px solid var(--primary);
+        }
+
+        .ranking-position {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .ranking-position.gold {
+            background: var(--gold);
+            color: var(--text-primary);
+        }
+
+        .ranking-position.silver {
+            background: var(--silver);
+            color: var(--text-primary);
+        }
+
+        .ranking-position.bronze {
+            background: var(--bronze);
+            color: white;
+        }
+
+        .ranking-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .ranking-info {
+            flex: 1;
+        }
+
+        .ranking-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .ranking-level {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .ranking-points {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Daily Challenges */
+        .challenges-section {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .challenge-card {
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            transition: all 0.2s;
+        }
+
+        .challenge-card:hover {
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .challenge-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .challenge-reward {
+            background: var(--accent);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .challenge-description {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .challenge-progress {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .challenge-progress-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .challenge-progress-fill {
+            height: 100%;
+            background: var(--success);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .challenge-progress-text {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* Recent Activity */
+        .activity-section {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 32px;
+        }
+
+        .activity-timeline {
+            position: relative;
+            padding-left: 32px;
+        }
+
+        .activity-timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .activity-item {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .activity-item::before {
+            content: '';
+            position: absolute;
+            left: -28px;
+            top: 4px;
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+
+        .activity-content {
+            font-size: 14px;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .profile-header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-stats {
+                justify-content: center;
+            }
+
+            .profile-name {
+                font-size: 24px;
+            }
+
+            .achievements-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="header-left">
+                <button class="back-btn" onclick="window.history.back()">←</button>
+                <h1 class="header-title">Meu Perfil</h1>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn" title="Editar Perfil">✏️</button>
+                <button class="icon-btn" title="Configurações">⚙️</button>
+                <button class="icon-btn" title="Compartilhar">📤</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-container">
+        <!-- Profile Header -->
+        <div class="profile-header fade-in-up">
+            <div class="profile-header-content">
+                <div class="profile-avatar-container">
+                    <div class="profile-avatar">👤</div>
+                    <div class="profile-level-badge">12</div>
+                </div>
+                <div class="profile-info">
+                    <h2 class="profile-name">Maria Silva</h2>
+                    <p class="profile-title">🏆 Exploradora Veterana • São Paulo, SP</p>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">2.450</span>
+                            <span class="stat-label">Pontos</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">28</span>
+                            <span class="stat-label">Locais Visitados</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">15</span>
+                            <span class="stat-label">Conquistas</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">8</span>
+                            <span class="stat-label">Roteiros</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Level Progress -->
+        <div class="level-progress-section fade-in-up">
+            <div class="level-progress-header">
+                <h3 class="level-progress-title">⭐ Nível 12 - Exploradora Veterana</h3>
+                <span class="level-progress-info">2.450 / 3.000 XP</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: 82%;">
+                    <span class="progress-bar-text">82%</span>
+                </div>
+            </div>
+            <p class="next-level-info">Faltam 550 XP para alcançar o Nível 13 - Mestre Explorador 🎖️</p>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Left Column -->
+            <div>
+                <!-- Achievements -->
+                <div class="achievements-section fade-in-up">
+                    <div class="section-header">
+                        <h3 class="section-title">🏅 Conquistas Desbloqueadas</h3>
+                        <button class="view-all-btn">Ver todas →</button>
+                    </div>
+                    <div class="achievements-grid">
+                        <div class="achievement-card">
+                            <div class="achievement-badge">✓</div>
+                            <div class="achievement-icon">🏛️</div>
+                            <div class="achievement-name">Arquiteto</div>
+                            <div class="achievement-description">Visitou 10 monumentos</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-badge">✓</div>
+                            <div class="achievement-icon">🎨</div>
+                            <div class="achievement-name">Apreciador</div>
+                            <div class="achievement-description">5 museus visitados</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-badge">✓</div>
+                            <div class="achievement-icon">🍽️</div>
+                            <div class="achievement-name">Gourmet</div>
+                            <div class="achievement-description">15 restaurantes</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-badge">✓</div>
+                            <div class="achievement-icon">🌳</div>
+                            <div class="achievement-name">Natureza</div>
+                            <div class="achievement-description">8 parques explorados</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-badge">✓</div>
+                            <div class="achievement-icon">📸</div>
+                            <div class="achievement-name">Fotógrafo</div>
+                            <div class="achievement-description">50 fotos compartilhadas</div>
+                        </div>
+                        <div class="achievement-card locked">
+                            <div class="achievement-icon">🎭</div>
+                            <div class="achievement-name">Cultural</div>
+                            <div class="achievement-description">Visite 10 eventos</div>
+                        </div>
+                        <div class="achievement-card locked">
+                            <div class="achievement-icon">🏃</div>
+                            <div class="achievement-name">Maratonista</div>
+                            <div class="achievement-description">Caminhe 50km</div>
+                        </div>
+                        <div class="achievement-card locked">
+                            <div class="achievement-icon">⭐</div>
+                            <div class="achievement-name">Influencer</div>
+                            <div class="achievement-description">100 avaliações</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daily Challenges -->
+                <div class="challenges-section fade-in-up" style="margin-top: 32px;">
+                    <div class="section-header">
+                        <h3 class="section-title">🎯 Desafios Diários</h3>
+                        <span class="view-all-btn">Renova em 8h</span>
+                    </div>
+                    
+                    <div class="challenge-card">
+                        <div class="challenge-header">
+                            <div class="challenge-title">
+                                🏛️ Explorador de Monumentos
+                            </div>
+                            <div class="challenge-reward">+150 XP</div>
+                        </div>
+                        <div class="challenge-description">
+                            Visite 3 monumentos históricos hoje
+                        </div>
+                        <div class="challenge-progress">
+                            <div class="challenge-progress-bar">
+                                <div class="challenge-progress-fill" style="width: 66%;"></div>
+                            </div>
+                            <span class="challenge-progress-text">2/3</span>
+                        </div>
+                    </div>
+
+                    <div class="challenge-card">
+                        <div class="challenge-header">
+                            <div class="challenge-title">
+                                📸 Caçador de Fotos
+                            </div>
+                            <div class="challenge-reward">+100 XP</div>
+                        </div>
+                        <div class="challenge-description">
+                            Tire 5 fotos em locais diferentes
+                        </div>
+                        <div class="challenge-progress">
+                            <div class="challenge-progress-bar">
+                                <div class="challenge-progress-fill" style="width: 80%;"></div>
+                            </div>
+                            <span class="challenge-progress-text">4/5</span>
+                        </div>
+                    </div>
+
+                    <div class="challenge-card">
+                        <div class="challenge-header">
+                            <div class="challenge-title">
+                                ⭐ Crítico Gastronômico
+                            </div>
+                            <div class="challenge-reward">+80 XP</div>
+                        </div>
+                        <div class="challenge-description">
+                            Avalie 2 restaurantes que você visitou
+                        </div>
+                        <div class="challenge-progress">
+                            <div class="challenge-progress-bar">
+                                <div class="challenge-progress-fill" style="width: 0%;"></div>
+                            </div>
+                            <span class="challenge-progress-text">0/2</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="activity-section fade-in-up" style="margin-top: 32px;">
+                    <div class="section-header">
+                        <h3 class="section-title">📊 Atividade Recente</h3>
+                    </div>
+                    <div class="activity-timeline">
+                        <div class="activity-item">
+                            <div class="activity-content">
+                                <strong>Conquistou</strong> a medalha "Arquiteto" 🏛️
+                            </div>
+                            <div class="activity-time">Há 2 horas</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-content">
+                                <strong>Visitou</strong> Catedral Metropolitana
+                            </div>
+                            <div class="activity-time">Há 3 horas</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-content">
+                                <strong>Completou</strong> o roteiro "Brasília Modernista"
+                            </div>
+                            <div class="activity-time">Ontem</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-content">
+                                <strong>Avaliou</strong> Restaurante Mangai com ⭐⭐⭐⭐⭐
+                            </div>
+                            <div class="activity-time">Há 2 dias</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-content">
+                                <strong>Subiu</strong> para o Nível 12
+                            </div>
+                            <div class="activity-time">Há 3 dias</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div>
+                <!-- Ranking -->
+                <div class="ranking-section fade-in-up">
+                    <div class="section-header">
+                        <h3 class="section-title">🏆 Ranking Semanal</h3>
+                    </div>
+                    <div class="ranking-list">
+                        <div class="ranking-item">
+                            <div class="ranking-position gold">1</div>
+                            <div class="ranking-avatar">👨</div>
+                            <div class="ranking-info">
+                                <div class="ranking-name">João Santos</div>
+                                <div class="ranking-level">Nível 15</div>
+                            </div>
+                            <div class="ranking-points">3.850</div>
+                        </div>
+                        <div class="ranking-item">
+                            <div class="ranking-position silver">2</div>
+                            <div class="ranking-avatar">👩</div>
+                            <div class="ranking-info">
+                                <div class="ranking-name">Ana Costa</div>
+                                <div class="ranking-level">Nível 14</div>
+                            </div>
+                            <div class="ranking-points">3.120</div>
+                        </div>
+                        <div class="ranking-item">
+                            <div class="ranking-position bronze">3</div>
+                            <div class="ranking-avatar">👨</div>
+                            <div class="ranking-info">
+                                <div class="ranking-name">Pedro Lima</div>
+                                <div class="ranking-level">Nível 13</div>
+                            </div>
+                            <div class="ranking-points">2.890</div>
+                        </div>
+                        <div class="ranking-item current-user">
+                            <div class="ranking-position">4</div>
+                            <div class="ranking-avatar">👤</div>
+                            <div class="ranking-info">
+                                <div class="ranking-name">Maria Silva (Você)</div>
+                                <div class="ranking-level">Nível 12</div>
+                            </div>
+                            <div class="ranking-points">2.450</div>
+                        </div>
+                        <div class="ranking-item">
+                            <div class="ranking-position">5</div>
+                            <div class="ranking-avatar">👩</div>
+                            <div class="ranking-info">
+                                <div class="ranking-name">Carla Souza</div>
+                                <div class="ranking-level">Nível 11</div>
+                            </div>
+                            <div class="ranking-points">2.180</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Animate progress bars on load
+        window.addEventListener('load', () => {
+            const progressBars = document.querySelectorAll('.progress-bar-fill, .challenge-progress-fill');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 100);
+            });
+        });
+
+        // Achievement card click
+        document.querySelectorAll('.achievement-card').forEach(card => {
+            card.addEventListener('click', function() {
+                if (!this.classList.contains('locked')) {
+                    alert('Conquista desbloqueada! 🎉\n\nVocê pode ver mais detalhes sobre suas conquistas.');
+                } else {
+                    alert('Conquista bloqueada 🔒\n\nContinue explorando Brasília para desbloquear!');
+                }
+            });
+        });
+
+        // Add fade-in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.6s ease-out forwards';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in-up').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
+
