@@ -1,0 +1,21 @@
+﻿# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos do editor
+.vscode/
+.idea/
+*.swp
+
+# Node
+node_modules/
+.next/
+
+# Python
+__pycache__/
+*.pyc
+.env
+venv/
+
+# Docker
+.docker/
