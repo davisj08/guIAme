@@ -1,6 +1,6 @@
 # Documentação do Design de Cadastro - GUIA.ME
 
-**Autor**: Manus AI
+
 **Data**: 12 de Outubro de 2025
 
 ## 1. Introdução

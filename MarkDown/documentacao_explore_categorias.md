@@ -1,6 +1,4 @@
-# Documentação do Design - Explore por Categoria
-
-**Autor**: Manus AI  
+# Documentação do Design - Explore por Categoria 
 **Data**: 12 de Outubro de 2025
 
 ## 1. Visão Geral

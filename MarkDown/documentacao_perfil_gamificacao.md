@@ -1,6 +1,4 @@
 # Documentação do Perfil do Usuário e Sistema de Gamificação - GUIA.ME
-
-**Autor**: Manus AI  
 **Data**: 12 de Outubro de 2025
 
 ## 1. Visão Geral

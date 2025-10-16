@@ -1,6 +1,4 @@
 # Documentação do Design da Tela Inicial - GUIA.ME
-
-**Autor**: Manus AI  
 **Data**: 12 de Outubro de 2025
 
 ## 1. Visão Geral

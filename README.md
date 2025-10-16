@@ -2,7 +2,6 @@
 
 **Projeto**: WebApp de Guia Turístico para Brasília  
 **Tipo**: Trabalho de Conclusão de Curso (TCC)  
-**Autor do Design**: Manus AI  
 **Data**: 12 de Outubro de 2025
 
 ---
