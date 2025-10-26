@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:13
+    container_name: guia-me-db
+    restart: always
+    environment:
+      POSTGRES_USER: guiame_user
+      POSTGRES_PASSWORD: guiame_pass
+      POSTGRES_DB: guiame_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - guiame-network
+
+  # Redis Cache
+  redis:
+    image: redis:6.2-alpine
+    container_name: guia-me-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - guiame-network
+
+  # Backend (FastAPI)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: guia-me-backend
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://guiame_user:guiame_pass@db:5432/guiame_db
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./backend:/app
+    networks:
+      - guiame-network
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Frontend (Next.js)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: guia-me-frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - guiame-network
+    command: npm run dev
+
+volumes:
+  postgres_data:
+
+networks:
+  guiame-network:
+    driver: bridge
