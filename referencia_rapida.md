@@ -82,3 +82,16 @@ uvicorn main:app --reload
 
 # 6. Abrir navegador
 # http://localhost:8000/docs
+
+
+# Deletar usuário específico
+docker-compose exec db psql -U guiame_user -d guiame_db -c "DELETE FROM usuarios WHERE email='joao@example.com';"
+
+# Deletar todos os usuários
+docker-compose exec db psql -U guiame_user -d guiame_db -c "DELETE FROM usuarios;"
+
+# Ver estrutura da tabela
+docker-compose exec db psql -U guiame_user -d guiame_db -c "\d usuarios"
+
+# Ver dados de preferencias_categorias
+docker-compose exec db psql -U guiame_user -d guiame_db -c "SELECT id, nome, preferencias_categorias FROM usuarios;"
