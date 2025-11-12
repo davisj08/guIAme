@@ -22,9 +22,10 @@ class Settings(BaseSettings):
     )
     redis_ttl: int = 3600
     
-    # OpenAI
+    # OpenAI (DeepSeek)
     openai_api_key: Optional[str] = os.getenv("OPENAI_API_KEY")
-    openai_model: str = "gpt-4"
+    openai_model: str = "deepseek-chat"
+    openai_base_url: str = os.getenv("OPENAI_BASE_URL", "https://api.deepseek.com" )
     
     # Segurança / JWT
     secret_key: str = os.getenv(
@@ -46,13 +47,14 @@ class Settings(BaseSettings):
     ]
     
     # Ambiente
-    environment: str = os.getenv("ENVIRONMENT", "development" )
+    environment: str = os.getenv("ENVIRONMENT", "development"  )
     debug: bool = os.getenv("DEBUG", "True").lower() == "true"
     
     class Config:
         env_file: str = ".env"
         env_file_encoding: str = "utf-8"
         case_sensitive: bool = False
+        extra: str = "allow"  # ← PERMITE CAMPOS EXTRAS!
 
 
 settings = Settings()

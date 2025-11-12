@@ -13,7 +13,7 @@ from app.schemas.ponto_turistico import (
 )
 from app.schemas.response import ResponseModel, PaginatedResponse
 from app.services.ponto_turistico_service import PontoTuristicoService
-from app.core.dependencies import get_current_active_user
+from app.core.security import get_current_active_user
 
 
 router = APIRouter(prefix="/pontos-turisticos", tags=["Pontos Turísticos"])

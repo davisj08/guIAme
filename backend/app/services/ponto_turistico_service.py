@@ -18,9 +18,7 @@ class PontoTuristicoService:
         busca: Optional[str] = None
     ) -> tuple[List[PontoTuristico], int]:
         """Retorna lista de pontos turísticos com filtros"""
-        query = db.query(PontoTuristico).filter(
-            PontoTuristico.ativo == True
-        )
+        query = db.query(PontoTuristico)
 
         # Filtro por categoria
         if categoria:
@@ -46,8 +44,7 @@ class PontoTuristicoService:
     def get_by_id(db: Session, ponto_id: int) -> Optional[PontoTuristico]:
         """Retorna um ponto turístico por ID"""
         return db.query(PontoTuristico).filter(
-            PontoTuristico.id == ponto_id,
-            PontoTuristico.ativo == True
+            PontoTuristico.id == ponto_id
         ).first()
 
     @staticmethod
@@ -84,19 +81,17 @@ class PontoTuristicoService:
 
     @staticmethod
     def delete(db: Session, ponto_id: int) -> bool:
-        """Deleta (soft delete) um ponto turístico"""
+        """Deleta um ponto turístico do banco de dados"""
         ponto = PontoTuristicoService.get_by_id(db, ponto_id)
         if not ponto:
             return False
 
-        ponto.ativo = False
+        db.delete(ponto)
         db.commit()
         return True
 
     @staticmethod
     def get_categorias(db: Session) -> List[str]:
         """Retorna lista de categorias únicas"""
-        categorias = db.query(PontoTuristico.categoria).filter(
-            PontoTuristico.ativo == True
-        ).distinct().all()
-        return [cat[0] for cat in categorias]
+        categorias = db.query(PontoTuristico.categoria).distinct().all()
+        return [cat[0] for cat in categorias if cat[0] is not None]
