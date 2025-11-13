@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.routers import auth, pontos_turisticos  # ← ADICIONAR pontos_turisticos
+from app.routers import auth, pontos_turisticos #ADICIONAR pontos_turisticos
+from app.routers import chat
+
 
 app = FastAPI(
     title=settings.app_name,
@@ -33,3 +35,10 @@ def read_root():
 @app.get("/health")
 def health_check():
     return {"status": "healthy"}
+
+app.include_router(
+ chat.router,
+ prefix="/api",
+ tags=["Chat com IA"]
+)
+

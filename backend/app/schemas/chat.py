@@ -8,19 +8,21 @@ class ChatMessage(BaseModel):
     content: str = Field(..., description="Conteúdo da mensagem")
     timestamp: Optional[datetime] = None
 
+    class Config:
+        from_attributes = True
+
 class ChatRequest(BaseModel):
-    """Requisição para o chatbot"""
-    message: str = Field(..., min_length=1, max_length=1000,
-                         description="Mensagem do usuário")
-    include_context: bool = Field(True, description="Incluir contexto de Brasília")
+    """Requisição de chat"""
+    mensagem: str = Field(..., min_length=1, max_length=1000, description="Mensagem do usuário")
+    contexto: Optional[str] = Field(None, description="Contexto adicional (ex: ponto_turistico_id:1)")
 
 class ChatResponse(BaseModel):
-    """Resposta do chatbot"""
-    message: str = Field(..., description="Resposta do assistente")
-    conversation_id: Optional[str] = None
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    """Resposta do chat"""
+    resposta: str
+    timestamp: datetime
+    tokens_usados: Optional[int] = None
 
 class ChatHistoryResponse(BaseModel):
     """Histórico de conversas"""
-    messages: List[ChatMessage]
-    total_messages: int
+    mensagens: List[ChatMessage]
+    total: int
