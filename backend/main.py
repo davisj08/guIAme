@@ -1,8 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.routers import auth, pontos_turisticos #ADICIONAR pontos_turisticos
+from app.routers import auth, pontos_turisticos, recomendacoes #ADICIONAR pontos_turisticos
 from app.routers import chat
+
+
 
 
 app = FastAPI(
@@ -42,3 +44,8 @@ app.include_router(
  tags=["Chat com IA"]
 )
 
+app.include_router(
+ recomendacoes.router,
+ prefix="/api",
+ tags=["Recomendações com IA"]
+)
