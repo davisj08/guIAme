@@ -3,6 +3,7 @@ from sqlalchemy.sql import func
 from app.database.connection import Base
 import json
 from typing import List, Optional
+from sqlalchemy.orm import relationship
 
 
 class Usuario(Base):
@@ -55,3 +56,6 @@ class Usuario(Base):
             self._preferencias_categorias = json.dumps(value, ensure_ascii=False)
         else:
             self._preferencias_categorias = None
+
+    # Adicionar esta linha:
+    pontuacao = relationship("PontuacaoUsuario", back_populates="usuario", uselist=False)
