@@ -1,8 +1,8 @@
 from .ponto_turistico import PontoTuristico
 from .usuario import Usuario
-from .avaliacao import Avaliacao
+from .avaliacao import Avaliacao, Visita
 from .conquista import Conquista
-from .visita import Visita
+
 
 __all__ = [
     "PontoTuristico",
