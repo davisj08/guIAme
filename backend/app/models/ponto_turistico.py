@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, Float, Text, DateTime
 from sqlalchemy.sql import func
+from sqlalchemy.orm import relationship  # ← NOVO
 from app.database.connection import Base
 
 
@@ -28,3 +29,6 @@ class PontoTuristico(Base):
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    
+    # Relacionamentos  ← NOVO
+    favoritos = relationship("Favorito", back_populates="ponto_turistico")

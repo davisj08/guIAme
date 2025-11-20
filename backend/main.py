@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.routers import auth, pontos_turisticos, recomendacoes, gamificacao , avaliacao
+from app.routers import auth, pontos_turisticos, recomendacoes, gamificacao , avaliacao , favorito
 from app.routers import chat
 
 
@@ -54,6 +54,6 @@ app.include_router(
 
 app.include_router(gamificacao.router)
 app.include_router(avaliacao.router)
-
+app.include_router(favorito.router)
 
 

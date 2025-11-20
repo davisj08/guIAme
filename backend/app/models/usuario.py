@@ -59,3 +59,4 @@ class Usuario(Base):
 
     # Adicionar esta linha:
     pontuacao = relationship("PontuacaoUsuario", back_populates="usuario", uselist=False)
+    favoritos = relationship("Favorito", back_populates="usuario")
