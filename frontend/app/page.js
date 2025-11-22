@@ -1,133 +1,230 @@
-import { MapIcon, ChatBubbleLeftRightIcon, TrophyIcon, SparklesIcon } from '@heroicons/react/24/outline'
+'use client'
 
-// Assumindo que estes componentes estão disponíveis no escopo do projeto
-// import MainLayout from '@/components/layout/MainLayout'
-// import Button from '@/components/ui/Button'
-// import Card from '@/components/ui/Card'
-
-// Para fins de demonstração em um único arquivo, vou criar stubs simples para Button e Card.
-// O 'next/link' foi substituído por uma tag <a> para evitar o erro de compilação.
-const Button = ({ children, href, variant = 'primary', size = 'md', className = '' }) => {
-  const baseClasses = "font-semibold rounded-lg shadow transition duration-300 ease-in-out px-6 py-3 text-center";
-  const variants = {
-    primary: "bg-indigo-600 text-white hover:bg-indigo-700",
-    secondary: "bg-white text-indigo-600 border border-indigo-600 hover:bg-indigo-50",
-  };
-  const classes = `${baseClasses} ${variants[variant]} ${className}`;
-
-  if (href) {
-    // Usando <a> nativo em vez de next/link para compatibilidade no ambiente
-    return <a href={href} className={classes}>{children}</a>;
-  }
-  return <button className={classes}>{children}</button>;
-};
-
-const Card = ({ children, className = '' }) => (
-  <div className={`p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 ${className}`}>
-    {children}
-  </div>
-);
+import { useState, useEffect } from 'react'
+import MainLayout from '@/components/layout/MainLayout'
+import GeometricPattern from '@/components/ui/GeometricPattern'
+import TouristSpotCard from '@/components/ui/TouristSpotCard'
+import Button from '@/components/ui/Button'
+import LoadingSpinner from '@/components/ui/LoadingSpinner'
+import useScrollReveal from '@/hooks/useScrollReveal'
 
 export default function HomePage() {
-  const features = [
-    {
-      icon: MapIcon,
-      title: 'Pontos Turísticos',
-      description: 'Descubra os melhores lugares de Brasília com informações detalhadas e avaliações.',
-    },
-    {
-      icon: ChatBubbleLeftRightIcon,
-      title: 'Chat com IA',
-      description: 'Converse com nosso assistente inteligente para obter recomendações personalizadas.',
-    },
-    {
-      icon: SparklesIcon,
-      title: 'Recomendações Personalizadas',
-      description: 'Receba sugestões de roteiros baseadas em seus interesses e preferências.',
-    },
-    {
-      icon: TrophyIcon,
-      title: 'Gamificação',
-      description: 'Ganhe pontos e conquistas explorando a capital federal.',
-    },
-  ]
+  const [featuredSpots, setFeaturedSpots] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  // Nota: O MainLayout foi omitido aqui, pois o código deve ser autocontido.
+  // Scroll reveal para seção de cards
+  const [cardsRef, cardsVisible] = useScrollReveal({ threshold: 0.2 })
+
+  // Buscar pontos turísticos em destaque
+  useEffect(() => {
+    async function fetchFeaturedSpots() {
+      try {
+        const response = await fetch('http://localhost:8000/api/pontos-turisticos?limit=6')
+        const data = await response.json()
+        setFeaturedSpots(data.data || [])
+      } catch (error) {
+        console.error('Erro ao buscar pontos turísticos:', error)
+        // Dados mockados para fallback
+        setFeaturedSpots([
+          {
+            id: 1,
+            nome: 'Catedral de Brasília',
+            descricao: 'Obra-prima modernista projetada por Oscar Niemeyer',
+            categoria: 'Arquitetura',
+            likes: 243,
+            localizacao: 'Eixo Monumental',
+          },
+          {
+            id: 2,
+            nome: 'Congresso Nacional',
+            descricao: 'Sede do Poder Legislativo brasileiro',
+            categoria: 'Política',
+            likes: 189,
+            localizacao: 'Praça dos Três Poderes',
+          },
+          {
+            id: 3,
+            nome: 'Palácio da Alvorada',
+            descricao: 'Residência oficial do Presidente da República',
+            categoria: 'Arquitetura',
+            likes: 156,
+            localizacao: 'SGAN',
+          },
+          {
+            id: 4,
+            nome: 'Torre de TV',
+            descricao: 'Vista panorâmica de 360° de Brasília',
+            categoria: 'Turismo',
+            likes: 134,
+            localizacao: 'Eixo Monumental',
+          },
+          {
+            id: 5,
+            nome: 'Ponte JK',
+            descricao: 'Ponte estaiada sobre o Lago Paranoá',
+            categoria: 'Arquitetura',
+            likes: 201,
+            localizacao: 'Lago Sul',
+          },
+          {
+            id: 6,
+            nome: 'Memorial JK',
+            descricao: 'Homenagem ao fundador de Brasília',
+            categoria: 'História',
+            likes: 178,
+            localizacao: 'Eixo Monumental',
+          },
+        ])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchFeaturedSpots()
+  }, [])
+
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
-      
+    <MainLayout>
       {/* Hero Section */}
-      <section className="bg-white pt-20 pb-32 md:pt-28 md:pb-40 shadow-inner">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-4 tracking-tight">
-            Explore Brasília com Inteligência Artificial
-          </h1>
-          
-          <p className="max-w-3xl mx-auto text-xl text-gray-600 mb-10">
-            Descubra os tesouros da capital federal de forma personalizada e interativa
-          </p>
-          
-          <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-            <Button href="/pontos-turisticos" variant="primary">
-              Ver Pontos Turísticos
-            </Button>
-            <Button href="/chat-ia" variant="secondary">
-              Conversar com IA
-            </Button>
+      <section className="relative bg-white min-h-[calc(100vh-4rem)] flex items-center overflow-hidden">
+        {/* Padrão Geométrico de Fundo */}
+        <GeometricPattern opacity={0.08} />
+        
+        {/* Container Principal */}
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
+            {/* Lado Esquerdo: Conteúdo */}
+            <div className="text-left space-y-6 animate-fadeIn">
+              {/* Título Principal */}
+              <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold text-primary leading-tight">
+                Brasília
+              </h1>
+              
+              {/* Subtítulo */}
+              <p className="text-lg sm:text-xl text-gray-600 max-w-xl animate-fadeIn" style={{ animationDelay: '0.2s' }}>
+                Discover the citys landmarks and learn about its history with our interactive guide.
+              </p>
+              
+              {/* Botões CTA */}
+              <div className="flex flex-col sm:flex-row gap-4 pt-4 animate-fadeIn" style={{ animationDelay: '0.4s' }}>
+                <Button href="/cadastro" variant="primary" size="lg">
+                  Get Started
+                </Button>
+                <Button href="/pontos-turisticos" variant="secondary" size="lg">
+                  Explore Landmarks
+                </Button>
+              </div>
+
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-6 pt-8 animate-fadeIn" style={{ animationDelay: '0.6s' }}>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-primary">50+</div>
+                  <div className="text-sm text-gray-600 mt-1">Landmarks</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-primary">1000+</div>
+                  <div className="text-sm text-gray-600 mt-1">Visitors</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-primary">4.8★</div>
+                  <div className="text-sm text-gray-600 mt-1">Rating</div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Lado Direito: Card Flutuante */}
+            <div className="relative hidden lg:block animate-fadeIn" style={{ animationDelay: '0.2s' }}>
+              {/* Card de Ponto Turístico */}
+              <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden transform hover:scale-105 transition-all duration-300 animate-float">
+                {/* Padrão Geométrico no Card */}
+                <div className="absolute inset-0 opacity-5">
+                  <GeometricPattern opacity={1} />
+                </div>
+                
+                {/* Conteúdo do Card */}
+                <div className="relative z-10 p-8">
+                  <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                    Cathedral
+                  </h3>
+                  <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                    of Brasilia
+                  </h3>
+                  
+                  <p className="text-gray-600 mb-6">
+                    A modernist masterpiece designed by Oscar Niemeyer
+                  </p>
+                  
+                  {/* Likes */}
+                  <div className="flex items-center space-x-2 text-primary">
+                    <svg
+                      className="w-6 h-6 fill-current"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M7 22V11M2 13V20C2 21.1046 2.89543 22 4 22H17.4262C18.907 22 20.1662 20.9197 20.3914 19.4562L21.4683 12.4562C21.7479 10.6389 20.3418 9 18.5032 9H15V4C15 2.89543 14.1046 2 13 2C12.4477 2 12 2.44772 12 3V3.5C12 4.03153 11.7891 4.53782 11.4142 4.91287L7.58579 8.74129C7.21071 9.11637 7 9.62266 7 10.1542V11M7 11H4C2.89543 11 2 11.8954 2 13Z" />
+                    </svg>
+                    <span className="text-lg font-semibold">243</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
+        
+        {/* Padrão Geométrico Extra no Canto Inferior Direito */}
+        <div className="absolute bottom-0 right-0 w-1/2 h-1/2 opacity-5 pointer-events-none">
+          <GeometricPattern opacity={1} />
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* Seção de Pontos Turísticos em Destaque */}
+      <section ref={cardsRef} className="relative bg-gray-50 py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
-              Funcionalidades
+          {/* Cabeçalho da Seção */}
+          <div className={`text-center mb-12 transition-all duration-800 ${cardsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-4">
+              Featured Landmarks
             </h2>
-            <p className="text-lg text-gray-600">
-              Tudo que você precisa para uma experiência turística completa
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Explore the most iconic tourist attractions in Brasília
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <Card key={index} className="flex flex-col items-center text-center">
-                <feature.icon className="h-10 w-10 text-indigo-500 mb-4" />
-                
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  {feature.title}
-                </h3>
-                
-                <p className="text-gray-500 text-sm">
-                  {feature.description}
-                </p>
-              </Card>
-            ))}
+          {/* Grid de Cards */}
+          {loading ? (
+            <div className="flex justify-center py-20">
+              <LoadingSpinner size="xl" />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {featuredSpots.map((spot, index) => (
+                <div
+                  key={spot.id}
+                  className={`transition-all duration-600 ${
+                    cardsVisible 
+                      ? 'opacity-100 translate-y-0' 
+                      : 'opacity-0 translate-y-10'
+                  }`}
+                  style={{ 
+                    transitionDelay: cardsVisible ? `${index * 100}ms` : '0ms' 
+                  }}
+                >
+                  <TouristSpotCard spot={spot} />
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Botão Ver Todos */}
+          <div className={`text-center mt-12 transition-all duration-800 ${cardsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '600ms' }}>
+            <Button href="/pontos-turisticos" variant="secondary" size="lg">
+              View All Landmarks
+            </Button>
           </div>
         </div>
       </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-indigo-600">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
-          
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-            Pronto para explorar?
-          </h2>
-          
-          <p className="text-xl text-indigo-100 mb-8">
-            Cadastre-se gratuitamente e comece sua jornada por Brasília
-          </p>
-          
-          <Button href="/registro" variant="secondary" className="bg-white text-indigo-600 hover:bg-indigo-50">
-            Criar Conta Grátis
-          </Button>
-        </div>
-      </section>
-
-    </div>
+    </MainLayout>
   )
 }

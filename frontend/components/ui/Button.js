@@ -1,38 +1,61 @@
-import clsx from 'clsx'
+'use client'
+
+import Link from 'next/link'
 
 export default function Button({
   children,
+  href,
+  onClick,
   variant = 'primary',
   size = 'md',
-  className,
-  disabled,
-  ...props
+  fullWidth = false,
+  disabled = false,
+  className = '',
 }) {
-  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
-
+  // Variantes de estilo
   const variants = {
-    primary: 'bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500',
-    secondary: 'bg-secondary-500 text-white hover:bg-secondary-600 focus:ring-secondary-500',
-    outline: 'border-2 border-primary-500 text-primary-500 hover:bg-primary-50 focus:ring-primary-500',
-    ghost: 'text-gray-700 hover:bg-gray-100 focus:ring-gray-500',
+    primary: 'bg-primary text-white hover:bg-blue-700 shadow-md hover:shadow-primary-lg',
+    secondary: 'bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white shadow-md hover:shadow-lg',
+    outline: 'bg-transparent text-gray-700 border-2 border-gray-300 hover:border-primary hover:text-primary',
+    ghost: 'bg-transparent text-gray-700 hover:bg-gray-100',
+    danger: 'bg-red-600 text-white hover:bg-red-700 shadow-md hover:shadow-lg',
   }
 
+  // Tamanhos
   const sizes = {
-    sm: 'px-3 py-1.5 text-sm',
-    md: 'px-4 py-2 text-base',
-    lg: 'px-6 py-3 text-lg',
+    sm: 'py-2 px-4 text-sm',
+    md: 'py-3 px-6 text-base',
+    lg: 'py-4 px-10 text-lg',
   }
 
+  // Classes base
+  const baseClasses = `
+    inline-flex items-center justify-center
+    font-bold rounded-full
+    transition-all duration-300
+    transform hover:scale-105 active:scale-95
+    disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
+    ${variants[variant]}
+    ${sizes[size]}
+    ${fullWidth ? 'w-full' : ''}
+    ${className}
+  `
+
+  // Se for link
+  if (href && !disabled) {
+    return (
+      <Link href={href} className={baseClasses}>
+        {children}
+      </Link>
+    )
+  }
+
+  // Se for botão
   return (
     <button
-      className={clsx(
-        baseStyles,
-        variants[variant],
-        sizes[size],
-        className
-      )}
+      onClick={onClick}
       disabled={disabled}
-      {...props}
+      className={baseClasses}
     >
       {children}
     </button>
